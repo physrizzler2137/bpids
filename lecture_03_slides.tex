@@ -1,0 +1,191 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{colorful-dream}
+
+\usepackage{minted}
+\setminted{fontsize=\footnotesize, breaklines=true}
+
+\title{Basics of Python for Data Science}
+\subtitle{Lecture 3: Pandas, SciPy, and scikit-learn for Engineering Data}
+\author{Lu Pa}
+\date{\today}
+
+% --- Title Slide Logos ---
+\titlegraphic{
+  \vspace{0.5cm}
+  \begin{center}
+    \includegraphics[height=1.8cm]{logo_university_placeholder.png}
+    \hspace{1cm}
+    \includegraphics[height=1.8cm]{logo_faculty_placeholder.png}
+  \end{center}
+}
+
+\begin{document}
+
+% ---------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART I}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART I}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{What is Pandas?}
+  \begin{itemize}
+    \item High-level library for working with tabular data.
+    \item Built on top of NumPy.
+    \item Provides:
+      \begin{itemize}
+        \item DataFrame and Series structures
+        \item fast filtering and grouping
+        \item missing value handling
+        \item merging and joining
+      \end{itemize}
+    \item Standard tool for data cleaning and reporting.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Loading Data with Pandas}
+\begin{minted}{python}
+import pandas as pd
+
+df = pd.read_csv("../datasets/vehicle_speeds_trackA.csv")
+df.info()
+df.head()
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Cleaning Data}
+  \begin{itemize}
+    \item Remove impossible values:
+      \begin{itemize}
+        \item negative speed
+        \item RPM spikes
+      \end{itemize}
+    \item Handle missing values:
+      \begin{itemize}
+        \item drop rows
+        \item fill with interpolation
+      \end{itemize}
+    \item Convert units (km/h → m/s).
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Filtering with Boolean Masks}
+\begin{minted}{python}
+high_speed = df[df["speed_kmh"] > 80]
+braking = df[df["accel_mps2"] < -1.5]
+cruise = df[(df["speed_kmh"] > 40) & (df["accel_mps2"].abs() < 0.2)]
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Grouping and Aggregation}
+\begin{minted}{python}
+df["minute"] = (df["time_s"] // 60).astype(int)
+
+summary = df.groupby("minute").agg({
+    "speed_kmh": ["mean", "max"],
+    "fuel_rate_gps": "mean",
+    "engine_rpm": "mean"
+})
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{SciPy for Engineering Signals}
+  \begin{itemize}
+    \item SciPy extends NumPy with:
+      \begin{itemize}
+        \item signal processing
+        \item optimization
+        \item interpolation
+        \item statistics
+      \end{itemize}
+    \item Today: smoothing and filtering.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Low-pass Filtering with SciPy}
+\begin{minted}{python}
+from scipy.signal import butter, filtfilt
+
+b, a = butter(3, 0.05)  # 3rd order, cutoff 0.05
+v_filtered = filtfilt(b, a, df["speed_kmh"])
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{scikit-learn for Simple Modeling}
+  \begin{itemize}
+    \item Machine learning library for:
+      \begin{itemize}
+        \item regression
+        \item classification
+        \item clustering
+      \end{itemize}
+    \item Today: linear regression on telemetry.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Predicting Fuel Rate from Speed}
+\begin{minted}{python}
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+X = df[["speed_kmh"]].values
+y = df["fuel_rate_gps"].values
+
+model = LinearRegression()
+model.fit(X, y)
+
+print(model.coef_, model.intercept_)
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Plotting Regression Fit}
+\begin{minted}{python}
+plt.scatter(df["speed_kmh"], df["fuel_rate_gps"], s=5)
+plt.plot(df["speed_kmh"], model.predict(X), color="red")
+plt.xlabel("Speed [km/h]")
+plt.ylabel("Fuel Rate [g/s]")
+plt.grid(True)
+plt.show()
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART II}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART II}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Engineering Workflow Tasks}
+  \begin{itemize}
+    \item Clean Track A and Track B datasets.
+    \item Identify acceleration, braking, and cruising segments.
+    \item Apply low-pass filtering to speed.
+    \item Build a regression model predicting fuel rate.
+    \item Compare Track A vs Track B driver behavior.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\end{document}

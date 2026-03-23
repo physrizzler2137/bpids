@@ -1,0 +1,193 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{colorful-dream}
+
+\usepackage{minted}
+\setminted{fontsize=\footnotesize, breaklines=true}
+
+\title{Podstawy Pythona dla Data Science}
+\subtitle{Wykład 1: Podstawy Pythona, środowisko, pierwszy wykres inżynierski}
+\author{Lu Pa}
+\date{\today}
+
+% --- Title Slide Logos ---
+\titlegraphic{
+  \vspace{0.5cm}
+  \begin{center}
+    \includegraphics[height=1.8cm]{logo_university_placeholder.png}
+    \hspace{1cm}
+    \includegraphics[height=1.8cm]{logo_faculty_placeholder.png}
+  \end{center}
+}
+
+\begin{document}
+
+% ---------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART I}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART I}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Krótka historia Pythona}
+  \begin{itemize}
+    \item Stworzony przez Guido van Rossuma w 1991 roku
+    \item Zaprojektowany jako język czytelny, prosty i ekspresyjny
+    \item Inspirowany językami ABC, Modula-3 oraz paradygmatem funkcyjnym
+    \item Python 2 → 2000, Python 3 → 2008 (obecny standard)
+    \item Dziś: jeden z najpopularniejszych języków na świecie
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Python w liczbach}
+  \begin{itemize}
+    \item \textbf{\#1} najpopularniejszy język w wielu rankingach branżowych
+    \item Ponad \textbf{400 000} pakietów w repozytorium PyPI
+    \item Używany przez:
+      \begin{itemize}
+        \item Google, Meta, Microsoft, Tesla, NASA, CERN
+        \item branże: automotive, lotnictwo, finanse, robotyka, biotechnologia
+      \end{itemize}
+    \item Dominujący w:
+      \begin{itemize}
+        \item data science
+        \item machine learning
+        \item automatyzacji i testowaniu
+        \item obliczeniach naukowych
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Dlaczego Python? (Zalety)}
+  \begin{itemize}
+    \item Bardzo czytelna składnia — niski próg wejścia
+    \item Ogromny ekosystem bibliotek naukowych
+    \item Świetne wsparcie społeczności
+    \item Działa na Windows, Linux, macOS
+    \item Integruje się z C/C++ dla wysokiej wydajności
+    \item Idealny do prototypowania i produkcji
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Ograniczenia Pythona}
+  \begin{itemize}
+    \item Nie jest najszybszym językiem (interpretowany)
+    \item GIL ogranicza wielowątkowość obliczeń CPU-bound
+    \item Zarządzanie pakietami bywa trudne dla początkujących
+    \item Nie nadaje się do systemów bardzo niskopoziomowych
+    \item Jednak: biblioteki naukowe rozwiązują większość problemów wydajności
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Python vs MATLAB / C++ / R}
+  \begin{itemize}
+    \item \textbf{MATLAB}: świetny dla inżynierów, ale drogi i zamknięty
+    \item \textbf{C++}: bardzo szybki, ale złożony i mało wygodny
+    \item \textbf{R}: mocny w statystyce, słabszy w ogólnej inżynierii
+    \item \textbf{Python}: darmowy, elastyczny, ogromny ekosystem, standard branżowy
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Ekosystem naukowy Pythona}
+  \begin{itemize}
+    \item \textbf{NumPy} — szybkie tablice numeryczne
+    \item \textbf{Pandas} — tabele danych, czyszczenie, grupowanie
+    \item \textbf{Matplotlib} — wykresy
+    \item \textbf{SciPy} — przetwarzanie sygnałów, optymalizacja
+    \item \textbf{scikit-learn} — uczenie maszynowe
+    \item \textbf{Jupyter} — interaktywne notatniki
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Dlaczego Jupyter w inżynierii?}
+  \begin{itemize}
+    \item Kod + opis + wykresy w jednym miejscu
+    \item Idealny do eksperymentów i dokumentacji
+    \item Powtarzalne analizy
+    \item Świetny do nauczania i raportowania
+    \item Powszechnie używany w przemyśle i badaniach
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART II}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART II}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Pierwsze importy}
+\begin{minted}{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Zbiór danych}
+  \begin{itemize}
+    \item Syntetyczne dane telemetryczne pojazdu
+    \item Kolumny:
+      \begin{itemize}
+        \item time\_s — czas w sekundach
+        \item speed\_kmh — prędkość pojazdu
+        \item accel\_mps2 — przyspieszenie
+        \item engine\_rpm — obroty silnika
+        \item fuel\_rate\_gps — zużycie paliwa
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Wczytywanie danych}
+\begin{minted}{python}
+df = pd.read_csv("../datasets/vehicle_speeds_trackA.csv")
+df.head()
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Pierwszy wykres inżynierski}
+\begin{minted}{python}
+plt.figure(figsize=(10,4))
+plt.plot(df["time_s"], df["speed_kmh"])
+plt.xlabel("Czas [s]")
+plt.ylabel("Prędkość [km/h]")
+plt.grid(True)
+plt.title("Prędkość pojazdu w czasie (Track A)")
+plt.show()
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Zadania praktyczne}
+  \begin{itemize}
+    \item Przelicz prędkość z km/h na m/s
+    \item Oblicz min, max i średnią prędkość
+    \item Wykreśl RPM w funkcji czasu
+    \item Zaznacz na wykresie maksymalną prędkość
+    \item Odfiltruj dane dla prędkości > 50 km/h
+    \item Wczytaj Track B i porównaj profile jazdy
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\end{document}

@@ -1,0 +1,212 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{colorful-dream}
+
+\usepackage{minted}
+\setminted{fontsize=\footnotesize, breaklines=true}
+
+\title{Podstawy Pythona dla Data Science}
+\subtitle{Wykład 2: NumPy, Matplotlib i sygnały inżynierskie}
+\author{Lu Pa}
+\date{\today}
+
+% --- Title Slide Logos ---
+\titlegraphic{
+  \vspace{0.5cm}
+  \begin{center}
+    \includegraphics[height=1.8cm]{logo_university_placeholder.png}
+    \hspace{1cm}
+    \includegraphics[height=1.8cm]{logo_faculty_placeholder.png}
+  \end{center}
+}
+
+\begin{document}
+
+% ---------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART I}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART I}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Od Pythona do obliczeń naukowych}
+  \begin{itemize}
+    \item Python staje się potężny dzięki bibliotekom naukowym.
+    \item Dziś skupiamy się na:
+      \begin{itemize}
+        \item \textbf{NumPy} — tablice numeryczne i wektoryzacja
+        \item \textbf{Matplotlib} — wykresy inżynierskie
+      \end{itemize}
+    \item Te dwie biblioteki są fundamentem ekosystemu naukowego.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Czym jest NumPy?}
+  \begin{itemize}
+    \item Podstawowa biblioteka do obliczeń numerycznych.
+    \item Zapewnia:
+      \begin{itemize}
+        \item szybkie tablice wielowymiarowe
+        \item operacje wektorowe
+        \item funkcje matematyczne
+        \item generatory liczb losowych
+      \end{itemize}
+    \item Napisana w C dla wysokiej wydajności.
+    \item Podstawa Pandas, SciPy, scikit-learn i wielu innych.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Tworzenie tablic NumPy}
+\begin{minted}{python}
+import numpy as np
+
+a = np.array([1, 2, 3])
+b = np.linspace(0, 10, 100)
+c = np.zeros(50)
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Operacje wektorowe}
+\begin{minted}{python}
+v = np.array([10, 20, 30])
+v_ms = v / 3.6
+\end{minted}
+
+\begin{itemize}
+  \item Operacje działają na całych tablicach.
+  \item Dużo szybsze i czytelniejsze niż pętle.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Przykład inżynierski: sygnał prędkości}
+  \begin{itemize}
+    \item Wyciągamy tablice:
+      \begin{itemize}
+        \item czas
+        \item prędkość
+      \end{itemize}
+    \item Obliczamy:
+      \begin{itemize}
+        \item przyspieszenie
+        \item jerk
+        \item wygładzoną prędkość
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Wyciąganie tablic z DataFrame}
+\begin{minted}{python}
+t = df["time_s"].values
+v = df["speed_kmh"].values
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Przyspieszenie — różniczkowanie numeryczne}
+
+\begin{equation}
+a(t) \approx \frac{\Delta v}{\Delta t}
+\end{equation}
+
+\begin{minted}{python}
+dt = np.diff(t)
+dv = np.diff(v)
+accel = dv / dt
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Jerk — pochodna przyspieszenia}
+
+\begin{equation}
+j(t) \approx \frac{\Delta a}{\Delta t}
+\end{equation}
+
+\begin{minted}{python}
+jerk = np.diff(accel) / dt[:-1]
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Wygładzanie sygnału — średnia krocząca}
+\begin{minted}{python}
+window = 15
+v_smooth = np.convolve(v, np.ones(window)/window, mode="same")
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Matplotlib — wykresy inżynierskie}
+  \begin{itemize}
+    \item Elastyczna i potężna biblioteka do wizualizacji.
+    \item Idealna do:
+      \begin{itemize}
+        \item przebiegów czasowych
+        \item dashboardów wielopanelowych
+        \item histogramów
+        \item wykresów punktowych
+      \end{itemize}
+    \item Bardzo konfigurowalna.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART II}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART II}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Wielopanelowy wykres inżynierski}
+\begin{minted}{python}
+fig, ax = plt.subplots(2, 2, figsize=(12, 8))
+
+ax[0,0].plot(t, v)
+ax[0,0].set_title("Prędkość [km/h]")
+
+ax[0,1].plot(t[:-1], accel)
+ax[0,1].set_title("Przyspieszenie [m/s²]")
+
+ax[1,0].plot(t, v_smooth)
+ax[1,0].set_title("Wygładzona prędkość")
+
+ax[1,1].plot(t, df["engine_rpm"])
+ax[1,1].set_title("Obroty silnika")
+
+for a in ax.ravel():
+    a.grid(True)
+
+plt.tight_layout()
+plt.show()
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Zadania praktyczne}
+  \begin{itemize}
+    \item Oblicz jerk i go zwizualizuj.
+    \item Porównaj różniczkowanie numeryczne z \texttt{np.gradient}.
+    \item Przetestuj różne okna wygładzania.
+    \item Wykonaj histogram przyspieszenia.
+    \item Zbuduj dashboard 2×2 z kluczowymi sygnałami.
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\end{document}

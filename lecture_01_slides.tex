@@ -1,0 +1,193 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{colorful-dream}
+
+\usepackage{minted}
+\setminted{fontsize=\footnotesize, breaklines=true}
+
+\title{Basics of Python for Data Science}
+\subtitle{Lecture 1: Python Basics, Environment, First Engineering Plot}
+\author{Lu Pa}
+\date{\today}
+
+% --- Title Slide Logos ---
+\titlegraphic{
+  \vspace{0.5cm}
+  \begin{center}
+    \includegraphics[height=1.8cm]{logo_university_placeholder.png}
+    \hspace{1cm}
+    \includegraphics[height=1.8cm]{logo_faculty_placeholder.png}
+  \end{center}
+}
+
+\begin{document}
+
+% ---------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART I}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART I}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{A Brief History of Python}
+  \begin{itemize}
+    \item Created by Guido van Rossum in 1991
+    \item Designed to be readable, simple, and expressive
+    \item Influenced by ABC, Modula-3, and functional languages
+    \item Python 2 → 2000, Python 3 → 2008 (modern standard)
+    \item Today: one of the most widely used languages in the world
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Python in Numbers}
+  \begin{itemize}
+    \item \textbf{\#1} most popular language in many industry surveys
+    \item Over \textbf{400,000} packages on PyPI
+    \item Used by:
+      \begin{itemize}
+        \item Google, Meta, Microsoft, Tesla, NASA, CERN
+        \item Automotive, aerospace, finance, biotech, robotics
+      \end{itemize}
+    \item Dominant in:
+      \begin{itemize}
+        \item Data science
+        \item Machine learning
+        \item Automation and testing
+        \item Scientific computing
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Why Python? (Advantages)}
+  \begin{itemize}
+    \item Easy to read and write — low barrier to entry
+    \item Huge ecosystem of scientific libraries
+    \item Excellent community support
+    \item Works across platforms (Windows, Linux, macOS)
+    \item Integrates with C/C++ for performance
+    \item Ideal for prototyping and production
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Limitations of Python}
+  \begin{itemize}
+    \item Not the fastest language (interpreted)
+    \item GIL limits multi-threaded CPU-bound tasks
+    \item Packaging can be confusing for beginners
+    \item Not ideal for low-level embedded systems
+    \item But: scientific libraries overcome most performance issues
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Python vs MATLAB / C++ / R}
+  \begin{itemize}
+    \item \textbf{MATLAB}: great for engineering, but expensive and closed
+    \item \textbf{C++}: fast and powerful, but complex and verbose
+    \item \textbf{R}: strong in statistics, weaker in general engineering
+    \item \textbf{Python}: free, flexible, huge ecosystem, modern standard
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{The Scientific Python Ecosystem}
+  \begin{itemize}
+    \item \textbf{NumPy} — fast numerical arrays
+    \item \textbf{PPandas} — data tables, cleaning, grouping
+    \item \textbf{Matplotlib} — plotting
+    \item \textbf{SciPy} — signal processing, optimization
+    \item \textbf{scikit-learn} — machine learning
+    \item \textbf{Jupyter} — interactive notebooks
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Why Jupyter for Engineering?}
+  \begin{itemize}
+    \item Code + text + plots in one place
+    \item Great for experimentation and documentation
+    \item Reproducible workflows
+    \item Perfect for teaching and reporting
+    \item Widely used in research and industry
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\section{PART II}
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{2cm}
+    {\usebeamerfont{title}\color{white}\Huge PART II}
+  \end{center}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{First Imports}
+\begin{minted}{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{The Dataset}
+  \begin{itemize}
+    \item Synthetic vehicle telemetry
+    \item Columns:
+      \begin{itemize}
+        \item time\_s — time in seconds
+        \item speed\_kmh — vehicle speed
+        \item accel\_mps2 — acceleration
+        \item engine\_rpm — engine speed
+        \item fuel\_rate\_gps — fuel rate
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{Loading the Data}
+\begin{minted}{python}
+df = pd.read_csv("../datasets/vehicle_speeds_trackA.csv")
+df.head()
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}[fragile]{First Engineering Plot}
+\begin{minted}{python}
+plt.figure(figsize=(10,4))
+plt.plot(df["time_s"], df["speed_kmh"])
+plt.xlabel("Time [s]")
+plt.ylabel("Speed [km/h]")
+plt.grid(True)
+plt.title("Vehicle Speed Over Time (Track A)")
+plt.show()
+\end{minted}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Practice Tasks}
+  \begin{itemize}
+    \item Convert speed from km/h to m/s
+    \item Compute min, max, and average speed
+    \item Plot RPM vs time
+    \item Highlight maximum speed on the plot
+    \item Filter data for speeds above 50 km/h
+    \item Load Track B and compare profiles
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\end{document}
